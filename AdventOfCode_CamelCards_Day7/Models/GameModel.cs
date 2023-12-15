@@ -22,36 +22,36 @@ namespace AdventOfCode_CamelCards_Day7.Models
             Game = game;
             GameAsList = game.Select(x => x.ToString()).ToList();
             Bet = bet;
-            Combination = GetCombination(game, GameAsList);
+            Combination = GetCombination(game);
             Value = CombinationValue(Combination);
             Rank = SetRank();
         }
 
-        private string GetCombination(string game, List<string> games)
+        private string GetCombination(string game)
         {
             var combinations = new CombinationsModel();
-            var repetitions = Calculator.CountRepetitions(game, games);
-            if(repetitions == combinations.OnePair)
+            var repetitions = Calculator.CountRepetitions(game);
+            if(repetitions.SequenceEqual(combinations.OnePair))
             {
                 return "OnePair";
             }
-            if(repetitions == combinations.TwoPair)
+            if(repetitions.SequenceEqual(combinations.TwoPair))
             {
                 return "TwoPair";
             }
-            if(repetitions == combinations.ThreeOfAKind)
+            if(repetitions.SequenceEqual(combinations.ThreeOfAKind))
             {
                 return "ThreePair";
             }
-            if(repetitions == combinations.FourOfAKind)
+            if(repetitions.SequenceEqual(combinations.FourOfAKind))
             {
                 return "FourOfAKind";
             }
-            if(repetitions == combinations.FiveOfAKind)
+            if(repetitions.SequenceEqual(combinations.FiveOfAKind))
             {
                 return "FiveOfAKind";
             }
-            if(repetitions == combinations.FullHouse)
+            if(repetitions.SequenceEqual(combinations.FullHouse))
             {
                 return "FullHouse";
             }

@@ -9,32 +9,29 @@ namespace AdventOfCode_CamelCards_Day7
 {
     public class Calculator
     {
-        public static List<int> CountRepetitions(string game, List<string> games)
+        public static List<int> CountRepetitions(string input)
         {
-            List<int> result = new List<int>();
+            var counts = new List<int>();
+            var visited = new HashSet<char>();
 
-            for (int i = 0; i < games.Count; i++)
+            foreach (char c in input)
             {
-                int count = 0;
-                string currentGame = games[i];
-
-                for (int startIndex = 0; startIndex <= game.Length - currentGame.Length;)
+                if (!visited.Contains(c))
                 {
-                    if (game.IndexOf(currentGame, startIndex) == startIndex)
+                    int count = 0;
+                    foreach (char x in input)
                     {
-                        count++;
-                        startIndex += currentGame.Length;
+                        if (x == c)
+                        {
+                            count++;
+                        }
                     }
-                    else
-                    {
-                        startIndex++;
-                    }
+                    counts.Add(count);
+                    visited.Add(c);
                 }
-
-                result.Add(count);
             }
-
-            return result;
+            counts.Sort();
+            return counts;
         }
     }
 }
