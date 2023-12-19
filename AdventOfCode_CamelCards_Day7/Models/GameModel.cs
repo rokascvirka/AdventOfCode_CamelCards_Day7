@@ -10,9 +10,10 @@ namespace AdventOfCode_CamelCards_Day7.Models
     public class GameModel
     {
         public string Game { get; set; }
-        public List<string> GameAsList { get; set; }
+        public List<string> CardsAsList { get; set; }
+        public List<int> CardsAsIntList { get; set; }
         public int Bet {  get; set; }
-        public string Combination { get; set; } // Power of hand
+        public HandsPower Combination { get; set; } 
         public float Value { get; set; }    
         public int Rank { get; set; }
 
@@ -20,51 +21,66 @@ namespace AdventOfCode_CamelCards_Day7.Models
         public GameModel(string game, int bet) 
         { 
             Game = game;
-            GameAsList = game.Select(x => x.ToString()).ToList();
+            CardsAsList = game.Select(x => x.ToString()).ToList();
+            CardsAsIntList = GetIntList(CardsAsList);
             Bet = bet;
             Combination = GetCombination(game);
             Value = CombinationValue(Combination);
             Rank = SetRank();
         }
 
-        private string GetCombination(string game)
+        private HandsPower GetCombination(string game)
         {
             var combinations = new CombinationsModel();
             var repetitions = Calculator.CountRepetitions(game);
             if(repetitions.SequenceEqual(combinations.OnePair))
             {
-                return "OnePair";
+                return HandsPower.OnePair;
             }
             if(repetitions.SequenceEqual(combinations.TwoPair))
             {
-                return "TwoPair";
+                return HandsPower.TwoPair;
             }
             if(repetitions.SequenceEqual(combinations.ThreeOfAKind))
             {
-                return "ThreePair";
+                return HandsPower.ThreePair;
             }
             if(repetitions.SequenceEqual(combinations.FourOfAKind))
             {
-                return "FourOfAKind";
+                return HandsPower.FourOfAKind;
             }
             if(repetitions.SequenceEqual(combinations.FiveOfAKind))
             {
-                return "FiveOfAKind";
+                return HandsPower.FiveOfAKind;
             }
             if(repetitions.SequenceEqual(combinations.FullHouse))
             {
-                return "FullHouse";
+                return HandsPower.FullHouse;
             }
             else
             {
-                return "Nothing";
+                return HandsPower.Nothing;
             }
         }
 
-        private float CombinationValue(string combination)
+        private float CombinationValue(HandsPower hands)
         {
-            
-            return 0;
+
+            return (int)hands;
+        }
+
+
+        private List<int> GetIntList(List<string> gameAsList)
+        {
+            var strengthOfCards = new List<string>() { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A" };
+            List<int> result = new List<int>();
+            foreach(var card in gameAsList) 
+            {
+                var index = strengthOfCards.IndexOf(card);
+                result.Add(index);
+            }
+
+            return result;
         }
 
         private int SetRank() 
